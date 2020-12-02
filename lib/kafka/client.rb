@@ -561,6 +561,8 @@ module Kafka
           batch.messages.each(&block)
           offsets[batch.partition] = batch.last_offset + 1 unless batch.unknown_last_offset?
         end
+        #do not hang if no more messages are coming
+        break if batches.map{|batch| batch.messages.length}.max < 1
       end
     end
 
